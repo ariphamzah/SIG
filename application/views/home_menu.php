@@ -236,60 +236,77 @@
         </div>
 
 
-        <div >
-          <?php
-              // Koneksi ke database
-              $host = 'localhost';
-              $dbname = 'sig';
-              $username = 'root';
-              $password = '';
+        <div>
+            <?php
+                // Koneksi ke database
+                $host = 'localhost';
+                $dbname = 'sig';
+                $username = 'root';
+                $password = '';
 
-              try {
-                  $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
-                  $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                try {
+                    $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
+                    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-                  // Query untuk mengambil data koordinat
-                  $stmt = $pdo->prepare("SELECT latitude, longitude FROM kerusakan_jalan");
-                  $stmt->execute();
-                  $coordinates = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                    // Query untuk mengambil data koordinat dan kategori
+                    $stmt = $pdo->prepare("SELECT latitude, longitude, kategori FROM kerusakan_jalan");
+                    $stmt->execute();
+                    $coordinates = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-              } catch (PDOException $e) {
-                  echo "Koneksi gagal: " . $e->getMessage();
-                  die();
-              }
-          ?>
+                } catch (PDOException $e) {
+                    echo "Koneksi gagal: " . $e->getMessage();
+                    die();
+                }
+            ?>
 
-          <span>PETA</span>
+            <span>PETA</span>
             <!-- MAP -->
-              <div id="map"></div>
-              <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
-               <script>
-              // Inisialisasi peta
-              var map = L.map('map').setView([-6.921843, 107.606935], 14);
+            <div id="map" style="height: 500px;"></div>
+            <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+            <script>
+                // Inisialisasi peta
+                var map = L.map('map').setView([-6.921843, 107.606935], 14);
 
-              // Tambahkan layer tile ke peta
-              L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-              }).addTo(map);
+                // Tambahkan layer tile ke peta
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                }).addTo(map);
 
-              // Data koordinat dari PHP (ambil sebagai JSON)
-              var coordinates = <?php echo json_encode($coordinates); ?>;
+                // Data koordinat dan kategori dari PHP
+                var coordinates = <?php echo json_encode($coordinates); ?>;
 
-              // Tambahkan marker dan polyline untuk outline
-              var latlngs = [];
-              coordinates.forEach(function(coord) {
-                  var latlng = [parseFloat(coord.latitude), parseFloat(coord.longitude)];
-                  latlngs.push(latlng);
-                  L.marker(latlng).addTo(map);
-              });
+                // Fungsi untuk menentukan warna marker sesuai kategori
+                function getMarkerColor(category) {
+                    switch (category) {
+                        case 'Diajukan': return 'blue';
+                        case 'Selesai': return 'green';
+                        case 'Diproses': return 'orange';
+                        case 'Ditolak': return 'red';
+                        default: return 'gray';
+                    }
+                }
 
-        // Tambahkan outline dengan polyline
-        // var outline = L.polyline(latlngs, { color: 'blue', weight: 10 }).addTo(map);
+                // Tambahkan marker ke peta
+                coordinates.forEach(function(coord) {
+                    var latlng = [parseFloat(coord.latitude), parseFloat(coord.longitude)];
+                    var color = getMarkerColor(coord.kategori);
 
-        // Atur agar peta menyesuaikan dengan outline
-        map.fitBounds(outline.getBounds());
-    </script>
-          </div>
+                    // Gunakan icon dengan warna berdasarkan kategori
+                    var customIcon = L.icon({
+                        iconUrl: `https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-${color}.png`,
+                        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.4/images/marker-shadow.png',
+                        iconSize: [25, 41],
+                        iconAnchor: [12, 41],
+                        popupAnchor: [1, -34],
+                        shadowSize: [41, 41]
+                    });
+
+                    L.marker(latlng, { icon: customIcon })
+                        .addTo(map)
+                        .bindPopup(`Kategori: ${coord.kategori}`);
+                });
+            </script>
+        </div>
       </section>
     </div>
 
