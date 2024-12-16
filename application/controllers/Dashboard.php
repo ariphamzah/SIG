@@ -69,23 +69,27 @@ class Dashboard extends CI_Controller {
 	public function proses_pengaduan_baru(){
 		// if($this->session->userdata('status') == 'login'){
 			$this->form_validation->set_rules('nama_jalan','Nama Jalan','required');
-			$this->form_validation->set_rules('latitude','Latitude','required');
-			$this->form_validation->set_rules('longitude','Longitude','required');
+			$this->form_validation->set_rules('latitude1','Latitude','required');
+			$this->form_validation->set_rules('longitude1','Longitude','required');
 			$this->form_validation->set_rules('jenis_kerusakan','Jenis Kerusakan','required');
 			$this->form_validation->set_rules('tingkat_kerusakan','Tingkat Kerusakan','required');
 	  
 		  if($this->form_validation->run() == TRUE)
 		  {
 			$nama_jalan         = $this->input->post('nama_jalan',TRUE);
-			$latitude           = $this->input->post('latitude',TRUE);
-			$longitude          = $this->input->post('longitude',TRUE);
+			$latitude1          = $this->input->post('latitude1',TRUE);
+			$longitude1         = $this->input->post('longitude1',TRUE);
+			$latitude2          = $this->input->post('latitude2',TRUE);
+			$longitude2         = $this->input->post('longitude2',TRUE);
 			$jenis_kerusakan    = $this->input->post('jenis_kerusakan',TRUE);
 			$tingkat_kerusakan  = $this->input->post('tingkat_kerusakan',TRUE);
 	  
 			$data = array(
 				  'nama_jalan'         => $nama_jalan,
-				  'latitude'           => $latitude,
-				  'longitude'          => $longitude,
+				  'latitude1'          => $latitude1,
+				  'longitude1'         => $longitude1,
+				  'latitude2'          => $latitude2,
+				  'longitude2'         => $longitude2,
 				  'jenis_kerusakan'    => $jenis_kerusakan,
 				  'tingkat_kerusakan'  => $tingkat_kerusakan,
 				  'kategori'		   => 'Diajukan'

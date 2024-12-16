@@ -1,7 +1,9 @@
 <?php
 	$nama_jalan = '';
-	$latitude = '';
-	$longitude = '';
+	$latitude1 = '';
+	$longitude1 = '';
+  $latitude2 = '';
+	$longitude2 = '';
 	$jenis_kerusakan = '';
 	$tingkat_kerusakan = '';
 	$flag = 0;
@@ -10,8 +12,10 @@
 	if(isset($masuk)){
 		foreach($masuk as $d){
       $nama_jalan = $d->nama_jalan;
-      $latitude = $d->latitude;
-      $longitude = $d->longitude;
+      $latitude1 = $d->latitude1;
+      $longitude1 = $d->longitude1;
+      $latitude2 = $d->latitude2;
+      $longitude2 = $d->longitude2;
       $jenis_kerusakan = $d->jenis_kerusakan;
       $tingkat_kerusakan = $d->tingkat_kerusakan;
       $flag=1;
@@ -74,8 +78,14 @@
                     <div>
                     <label for="lokasi" style="margin-right:101px;margin-bottom:18px;">Lokasi</label>
                       <div id="map" style="width:76%;height:380px;margin-bottom:20px;"></div>
-                      <input type="text" id="lat" name="latitude" value="<?= $latitude ?>" placeholder="Latitude">
-                      <input type="text" id="lng" name="longitude" value="<?= $longitude ?>" placeholder="Longitude">
+                      
+                      <!-- Input untuk koordinat lokasi 1 -->
+                      <input type="text" id="lat1" name="latitude1" value="<?= $latitude1 ?>" placeholder="Latitude 1">
+                      <input type="text" id="lng1" name="longitude1" value="<?= $longitude1 ?>" placeholder="Longitude 1">
+  
+                      <!-- Input untuk koordinat lokasi 2 -->
+                      <input type="text" id="lat2" name="latitude2" value="<?= $latitude2 ?>" placeholder="Latitude 2">
+                      <input type="text" id="lng2" name="longitude2" value="<?= $longitude2 ?>" placeholder="Longitude 2">
                     </div>
                     <div class="form-group" style="margin-top:20px">
                       <label for="jenis_kerusakan" style="margin-right:74px;">Jenis Kerusakan</label>
@@ -128,22 +138,38 @@
     maxZoom: 19
   }).addTo(map);
 
-  // Variabel global untuk marker
-  var marker;
+  // Variabel global untuk dua marker
+  var marker1 = null;
+  var marker2 = null;
+  var markerCount = 0; // Menghitung marker yang dipilih
 
   // Fungsi untuk menaruh marker
   function taruhMarker(posisiTitik) {
-    if (marker) {
-      // Pindahkan marker jika sudah ada
-      marker.setLatLng(posisiTitik);
-    } else {
-      // Buat marker baru jika belum ada
-      marker = L.marker(posisiTitik).addTo(map);
-    }
+    markerCount++;
 
-    // Isi nilai koordinat ke form
-    document.getElementById("lat").value = posisiTitik.lat;
-    document.getElementById("lng").value = posisiTitik.lng;
+    if (markerCount === 1) {
+      // Jika marker pertama belum ada, tambahkan marker 1
+      if (marker1) {
+        marker1.setLatLng(posisiTitik);
+      } else {
+        marker1 = L.marker(posisiTitik).addTo(map);
+      }
+      document.getElementById("lat1").value = posisiTitik.lat;
+      document.getElementById("lng1").value = posisiTitik.lng;
+
+    } else if (markerCount === 2) {
+      // Jika marker kedua belum ada, tambahkan marker 2
+      if (marker2) {
+        marker2.setLatLng(posisiTitik);
+      } else {
+        marker2 = L.marker(posisiTitik).addTo(map);
+      }
+      document.getElementById("lat2").value = posisiTitik.lat;
+      document.getElementById("lng2").value = posisiTitik.lng;
+
+      // Reset counter jika dua marker sudah ditaruh
+      markerCount = 0;
+    }
   }
 
   // Event listener untuk klik pada peta
