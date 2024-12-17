@@ -249,7 +249,7 @@
                     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
                     // Query untuk mengambil data koordinat dan kategori
-                    $stmt = $pdo->prepare("SELECT latitude, longitude, kategori FROM kerusakan_jalan");
+                    $stmt = $pdo->prepare("SELECT latitude1, longitude1, kategori FROM kerusakan_jalan");
                     $stmt->execute();
                     $coordinates = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -288,7 +288,7 @@
 
                 // Tambahkan marker ke peta
                 coordinates.forEach(function(coord) {
-                    var latlng = [parseFloat(coord.latitude), parseFloat(coord.longitude)];
+                    var latlng = [parseFloat(coord.latitude1), parseFloat(coord.longitude1)];
                     var color = getMarkerColor(coord.kategori);
 
                     // Gunakan icon dengan warna berdasarkan kategori

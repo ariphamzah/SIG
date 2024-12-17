@@ -73,6 +73,11 @@ class Dashboard extends CI_Controller {
 			$this->form_validation->set_rules('longitude1','Longitude','required');
 			$this->form_validation->set_rules('jenis_kerusakan','Jenis Kerusakan','required');
 			$this->form_validation->set_rules('tingkat_kerusakan','Tingkat Kerusakan','required');
+
+			if ($this->input->post('latitude2') == 0 && $this->input->post('longitude2') == 0){
+				$lat2  = $this->input->post('latitude1');
+				$long2 = $this->input->post('longitude2');
+			}
 	  
 		  if($this->form_validation->run() == TRUE)
 		  {
@@ -83,13 +88,25 @@ class Dashboard extends CI_Controller {
 			$longitude2         = $this->input->post('longitude2',TRUE);
 			$jenis_kerusakan    = $this->input->post('jenis_kerusakan',TRUE);
 			$tingkat_kerusakan  = $this->input->post('tingkat_kerusakan',TRUE);
+
+			$latitude2 = $this->input->post('latitude2');
+			$longitude2 = $this->input->post('longitude2');
+
+			if (empty($latitude2) || empty($longitude2) || ($latitude2 == 0 && $longitude2 == 0)) {
+				$lat2  = $this->input->post('latitude1');
+				$long2 = $this->input->post('longitude1');
+			} else {
+				$lat2  = $latitude2;
+				$long2 = $longitude2;
+			}
+
 	  
 			$data = array(
 				  'nama_jalan'         => $nama_jalan,
 				  'latitude1'          => $latitude1,
 				  'longitude1'         => $longitude1,
-				  'latitude2'          => $latitude2,
-				  'longitude2'         => $longitude2,
+				  'latitude2'          => $lat2,
+				  'longitude2'         => $long2,
 				  'jenis_kerusakan'    => $jenis_kerusakan,
 				  'tingkat_kerusakan'  => $tingkat_kerusakan,
 				  'kategori'		   => 'Diajukan'
