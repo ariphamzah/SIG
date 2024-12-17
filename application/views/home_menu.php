@@ -47,6 +47,7 @@
 <body class="hold-transition skin-blue sidebar-mini">
   <div class="wrapper">
     <header class="main-header">
+        <?php if (!empty($this->session->userdata('name'))) { ?>
         <!-- Logo -->
         <a href="<?= base_url('Dashboard') ?>" class="logo">
             <!-- mini logo for sidebar mini 50x50 pixels -->
@@ -55,19 +56,35 @@
             <span class="logo-lg"><b>Sistem Informasi Geografis</b></span>
         </a>
 
-      <!-- Header Navbar: style can be found in header.less -->
-    <nav class="navbar navbar-static-top">
+        <!-- Header Navbar: style can be found in header.less -->
+        <?php } ?> <nav class="navbar navbar-static-top">
+
+        <?php if (!empty($this->session->userdata('name'))) { ?>
+
         <!-- Sidebar toggle button-->
         <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
           <span class="sr-only">Toggle navigation</span>
         </a>
-        <div class="pull-right" style="margin:10px">
-            <a href="<?= base_url('admin/sigout'); ?>" class="btn btn-default"><i class="fa fa-sign-in" aria-hidden="true"></i> Sign in</a>
-        </div>  
+        
+            <div class="pull-right" style="margin:10px">
+                <a href="<?= base_url('Auth/sigout'); ?>" class="btn btn-default">
+                    <i class="fa fa-sign-out" aria-hidden="true"></i> Sign Out
+                </a>
+            </div>
+        <?php } else { ?>
+            <div class="pull-right" style="margin:10px">
+                <a href="<?= base_url('Auth/login'); ?>" class="btn btn-default">
+                    <i class="fa fa-sign-in" aria-hidden="true"></i> Sign In
+                </a>
+            </div>
+        <?php } ?>
+
     </nav>
 
     </header>
-        <!-- Left side column. contains the logo and sidebar -->
+        <?php if (!empty($this->session->userdata('name')) ){?>
+        
+          <!-- Left side column. contains the logo and sidebar -->
         <aside class="main-sidebar">
         <!-- sidebar: style can be found in sidebar.less -->
         <section class="sidebar">
@@ -93,7 +110,6 @@
                 </span>
             </a>
             </li>
-
             <li class="treeview">
             <a href="#">
                 <i class="fa fa-table"></i> <span>Tabel Pengaduan</span>
@@ -128,6 +144,7 @@
       </section>
       <!-- /.sidebar -->
     </aside>
+    <?php } ?>
 
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
@@ -150,6 +167,8 @@
               <h4><b>Sistem Informasi Geografis Kerusakan Jalan</b></h4>
             </center>
         </div>
+        <?php if (!empty($this->session->userdata('name')) ){?>
+
         <!-- Small boxes (Stat box) -->
         <div class="row">
           <div class="col-lg-3 col-xs-6">
@@ -165,11 +184,11 @@
                 <?php } ?>
                 <p>Pengaduan Baru</p>
               </div>
-              <div class="icon">
+            <div class="icon">
                 <i class="ion ion-bag"></i>
-              </div>
+          </div>
               <a href="<?= base_url('Dashboard/baru') ?>" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-            </div>
+        </div>
           </div>
           <!-- ./col -->
           <div class="col-lg-3 col-xs-6">
@@ -234,6 +253,33 @@
             </div>
           </div>
         </div>
+        <?php }
+          else { ?>
+            <div style="margin:10px;">
+                <p>
+                    <img src="https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png" 
+                        alt="Blue Marker Icon" width="25" height="41"> 
+                    adalah ikon untuk kerusakan jalan yang <b>baru diajukan</b>.
+                </p>
+                <p>
+                    <img src="https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-orange.png" 
+                        alt="Orange Marker Icon" width="25" height="41"> 
+                    adalah ikon untuk kerusakan jalan yang <b>sedang dalam proses perbaikan</b>.
+                </p>
+                <p>
+                    <img src="https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png" 
+                        alt="Green Marker Icon" width="25" height="41"> 
+                    adalah ikon untuk kerusakan jalan yang <b>sudah selesai diperbaiki</b>.
+                </p>
+                <p>
+                    <img src="https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png" 
+                        alt="Red Marker Icon" width="25" height="41"> 
+                    adalah ikon untuk kerusakan jalan yang <b>ditolak untuk diperbaiki</b>.
+                </p>
+            </div>
+        <?php } ?>
+
+        <a href="<?=base_url('Dashboard/form_baru')?>" style="margin:20px 0 20px 0;" type="button" class="btn btn-primary" name="tambah_data"><i class="fa fa-plus-circle" aria-hidden="true"></i> Tambah Pengaduan Kerusakan Jalan</a>
 
 
         <div>

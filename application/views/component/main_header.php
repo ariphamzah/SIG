@@ -14,9 +14,19 @@
         <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
           <span class="sr-only">Toggle navigation</span>
         </a>
-        <div class="pull-right" style="margin:10px">
-            <a href="<?= base_url('admin/sigout'); ?>" class="btn btn-default"><i class="fa fa-sign-in" aria-hidden="true"></i> Sign in</a>
-        </div>  
+        <?php if (!empty($this->session->userdata('name'))) { ?>
+            <div class="pull-right" style="margin:10px">
+                <a href="<?= base_url('Auth/sigout'); ?>" class="btn btn-default">
+                    <i class="fa fa-sign-out" aria-hidden="true"></i> Sign Out
+                </a>
+            </div>
+        <?php } else { ?>
+            <div class="pull-right" style="margin:10px">
+                <a href="<?= base_url('Auth/login'); ?>" class="btn btn-default">
+                    <i class="fa fa-sign-in" aria-hidden="true"></i> Sign In
+                </a>
+            </div>
+        <?php } ?>
     </nav>
 
     </header>
