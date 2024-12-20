@@ -226,6 +226,77 @@ class Dashboard extends CI_Controller {
 		} 
 	}
 
+	public function form_user()
+	{
+		if($this->session->userdata('status') == 'login'){
+			$data['nav'] = 9;
+		
+			// Load View
+			$this->load->view('component/header');
+			$data['main_header'] = $this->load->view('component/main_header', $data, TRUE);
+			$data['sidebar'] = $this->load->view('component/sidebar', NULL, TRUE);
+			$this->load->view('form/form_users',$data);
+			$this->load->view('component/footer');
+		}else {
+			redirect(base_url());
+		} 
+	}
+
+	public function proses_tambah_user()
+	{
+		if($this->session->userdata('status') == 'login'){
+	
+		$this->form_validation->set_rules('username','Username','required');
+		$this->form_validation->set_rules('email','Email','required|valid_email');
+		$this->form_validation->set_rules('password','Password','required');
+		$this->form_validation->set_rules('confirm_password','Confirm password','required|matches[password]');
+	
+		if($this->form_validation->run() == TRUE)
+		{	
+			$username     = $this->input->post('username',TRUE);
+			$email        = $this->input->post('email',TRUE);
+			$password     = $this->input->post('password',TRUE);
+	
+			if($this->KerusakanJalan_model->cek_username('user',$username)){
+				$this->session->set_flashdata('msg','Username Telah Digunakan');
+				redirect(base_url('Dashboard/form_user'));
+		
+			}else{
+				$data = array(
+					'username'   => $username,
+					'email' 	 => $email,
+					'password'   => $this->hash_password($password)
+				);
+	
+				$data_report = array(
+				'id_report'        => 'RP-'.date("Y").random_string('numeric', 8),
+				'user_report'      => $this->session->userdata('name'),
+				'jenis_report'     => 'report_user',
+				'note'             => 'Add User'. ' (' .$username. ')' 
+				);
+				
+				$this->KerusakanJalan_model->insert('tb_report',$data_report);
+		
+				$this->KerusakanJalan_model->insert('user',$data);
+		
+				$this->session->set_flashdata('msg_terdaftar','User Berhasil Ditambahkan');
+				redirect(base_url('Dashboard/users'));
+			}
+			}else {
+			$data['nav'] = 9;
+	
+			// Load View
+			$this->load->view('component/header');
+			$data['main_header'] = $this->load->view('component/main_header', $data, TRUE);
+			$data['sidebar'] = $this->load->view('component/sidebar', NULL, TRUE);
+			$this->load->view('form/form_users', $data);
+			$this->load->view('component/footer');   
+		}
+		}else {
+			redirect(base_url());
+		} 
+	}
+
 	public function proses_reset_user()
 	{
 		if($this->session->userdata('status') == 'login'){
@@ -257,6 +328,179 @@ class Dashboard extends CI_Controller {
 			redirect(base_url());
 		}
 	}
+
+	####################################
+           // End User
+  	####################################
+
+	####################################
+           // Profile
+  	####################################
+
+	public function profile()
+	{
+		if($this->session->userdata('status') == 'login'){
+			$data['nav'] = 7;
+
+			// Load View
+			$this->load->view('component/header');
+			$data['main_header'] = $this->load->view('component/main_header', $data, TRUE);
+			$data['sidebar'] = $this->load->view('component/sidebar', NULL, TRUE);
+			$this->load->view('profile',$data);
+			$this->load->view('component/footer');
+		}else {
+			redirect(base_url());
+		}  
+	}
+
+	public function proses_new_password()
+	{
+		if($this->session->userdata('status') == 'login'){
+		$this->form_validation->set_rules('email','Email','required');
+		$this->form_validation->set_rules('new_password','New Password','required');
+		$this->form_validation->set_rules('confirm_new_password','Confirm New Password','required|matches[new_password]');
+
+		if($this->form_validation->run() == TRUE)
+		{
+			$username = $this->input->post('username');
+			$email = $this->input->post('email');
+			$new_password = $this->input->post('new_password');
+
+			$data = array(
+				'email'    => $email,
+				'password' => $this->hash_password($new_password)
+			);
+
+			$where = array(
+				'id' =>$this->session->userdata('id')
+			);
+
+			$data_report = array(
+			'id_report'        => 'RP-'.date("Y").random_string('numeric', 8),
+			'user_report'      => $this->session->userdata('name'),
+			'jenis_report'     => 'report_user',
+			'note'             => 'Change Profile User '.$this->session->userdata('name')
+			);
+
+			$this->KerusakanJalan_model->insert('tb_report',$data_report);
+
+			$this->KerusakanJalan_model->update_password('user',$where,$data);
+
+			$this->session->set_flashdata('msg_berhasil','Password Telah Diganti');
+			redirect(base_url('Dashboard/profile'));
+		
+		}else {
+			// Load View
+			$data['nav'] = 7;
+
+			// Load View
+			$this->load->view('component/header');
+			$data['main_header'] = $this->load->view('component/main_header', $data, TRUE);
+			$data['sidebar'] = $this->load->view('component/sidebar', NULL, TRUE);
+			$this->load->view('profile',$data);
+			$this->load->view('component/footer');
+		}
+		}else {
+			redirect(base_url());
+		} 
+	}
+
+	public function proses_gambar_upload()
+	{
+		if($this->session->userdata('status') == 'login'){
+			$config =  array(
+				'upload_path'     => "./upload/user/img/",
+				'allowed_types'   => "gif|jpg|png|jpeg",
+				'max_size'        => "50000",  // ukuran file gambar
+				'max_height'      => "9680",
+				'max_width'       => "9024"
+			);
+			$this->load->library('upload',$config);
+			$this->upload->initialize($config);
+
+			if( ! $this->upload->do_upload('userpicture'))
+			{
+				$this->session->set_flashdata('msg_error_gambar', $this->upload->display_errors());
+				$this->load->view('profile',$data);
+
+			}else{
+				$upload_data = $this->upload->data();
+				$nama_file = $upload_data['file_name'];
+				$ukuran_file = $upload_data['file_size'];
+
+				//resize img + thumb Img -- Optional
+				$config['image_library']     = 'gd2';
+				$config['source_image']      = $upload_data['full_path'];
+				$config['create_thumb']      = FALSE;
+				$config['maintain_ratio']    = TRUE;
+				$config['width']             = 150;
+				$config['height']            = 150;
+
+				$this->load->library('image_lib', $config);
+				$this->image_lib->initialize($config);
+
+				if($this->session->userdata('photo') !== 'nopic.png'){
+					unlink('./upload/user/img/' . $this->session->userdata('photo'));
+				}
+				
+
+			$where = array(
+				'username' => $this->session->userdata('name')
+			);
+
+			$data_report = array(
+			'id_report'        => 'RP-'.date("Y").random_string('numeric', 8),
+			'user_report'      => $this->session->userdata('name'),
+			'jenis_report'     => 'report_user',
+			'note'             => 'Change Photo User '.$this->session->userdata('name')
+			);
+
+			$data = array(
+			'photo' => $nama_file
+			);
+
+			$this->session->set_userdata('photo', $this->upload->data('file_name'));
+			$this->KerusakanJalan_model->update('user',$data,$where);
+
+			$this->KerusakanJalan_model->insert('tb_report',$data_report);
+
+			$this->session->set_flashdata('msg_berhasil_gambar','Gambar Berhasil Di Upload');
+			redirect(base_url('Dashboard/profile'));
+		}
+		}else {
+			redirect(base_url());
+		} 
+	}
+
+	####################################
+           // End Profile
+  	####################################
+
+	####################################
+           // End Dashboard
+  	####################################
+
+	public function report()
+	{
+		if($this->session->userdata('status') == 'login'){
+			
+			$data['list_data'] = $this->KerusakanJalan_model->select('tb_report');
+			$data['nav'] = 6;
+
+			// Load View
+			$this->load->view('component/header');
+			$data['main_header'] = $this->load->view('component/main_header', $data, TRUE);
+			$data['sidebar'] = $this->load->view('component/sidebar', NULL, TRUE);
+			$this->load->view('tabel/report',$data);
+			$this->load->view('component/footer');
+		}else {
+			redirect(base_url());
+		}
+	}
+
+	####################################
+           // End Report
+  	####################################
 
 	//public function tabel_kerusakanjalan()
   //	{

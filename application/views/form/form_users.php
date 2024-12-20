@@ -4,7 +4,7 @@
 	$email = '';
 	$role = '';
   $flag = 0;
-  $link = base_url('admin/proses_tambah_user');
+  $link = base_url('Dashboard/proses_tambah_user');
 
 	if(isset($list_data)){
 		foreach($list_data as $d){
@@ -13,7 +13,7 @@
       $email=$d->email;
       $role=$d->role;
       $flag = 1;
-      $link=base_url('admin/proses_update_user');
+      $link=base_url('Dashboard/proses_update_user');
     }
 	}
 ?>
@@ -90,20 +90,7 @@
                     <label for="confirm_password" style="margin-right:47px;">Confirm Password</label>
                     <input type="password" name="confirm_password" style="width:60%;display:inline;" class="form-control responsive" id="confirm_password" placeholder="Confirm Password">
                 </div>
-                <div class="form-group">
-                  <label for="role" style="margin-right:132px;">Role</label>
-                  <select class="form-control responsive" name="role" style="width:60%;display:inline;">
-                    <option>-- Pilih Role --</option>
-                    <option value="0" <?= ($role == 0)?'selected':'' ?>>User Biasa</option>
-                    <option value="1" <?= ($role == 1)?'selected':'' ?>>User Admin</option>
-                  </select>
-                </div>
                 <!-- /.box-body -->
-                <?php if(isset($token_generate)){ ?>
-                  <input type="hidden" name="token"  class="form-control responsive" value="<?= $token_generate?>">
-                <?php }else {
-                  redirect(base_url('admin/form_user'));
-                }?>
 
                 <center>
                 <div class="form-group" style=" margin-top:50px; margin-bottom:50px;">
@@ -113,7 +100,7 @@
 
                 <div class="box-footer" style="width:90%;">
                   <a type="button" class="btn btn-default" style="margin-right:5px; responsive" onclick="history.back(-1)" name="btn_kembali"><i class="fa fa-arrow-left" aria-hidden="true"></i> Kembali</a>
-                  <a type="button" class="btn btn-info" style="margin-right:29% display:inline; responsive" href="<?=base_url('admin/users')?>" name="btn_listusers"><i class="fa fa-table" aria-hidden="true"></i> Lihat Users</a>
+                  <a type="button" class="btn btn-info" style="margin-right:29% display:inline; responsive" href="<?=base_url('Dashboard/users')?>" name="btn_listusers"><i class="fa fa-table" aria-hidden="true"></i> Lihat Users</a>
                 </div>
               </form>
             </div>

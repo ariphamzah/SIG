@@ -53,4 +53,23 @@ class KerusakanJalan_model extends CI_Model {
         $this->db->update($tabel,$data);
     }
 
+    public function update($tabel,$data,$where)
+    {
+        $this->db->where($where);
+        $this->db->update($tabel,$data);
+    }
+
+    public function delete($tabel,$where)
+    {
+        $this->db->where($where);
+        $this->db->delete($tabel);
+    }
+
+    public function cek_username($tabel,$username){
+        return $this->db->select('username')
+                 ->from($tabel)
+                 ->where('username',$username)
+                 ->get()->result();
+      }
+
 }

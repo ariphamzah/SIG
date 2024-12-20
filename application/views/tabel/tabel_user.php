@@ -15,8 +15,8 @@
         Tabel Users
       </h1>
       <ol class="breadcrumb">
-        <li><a href="<?=base_url('admin')?>"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li><a href="<?=base_url('admin/users')?>" class="active">Users</a></li>
+        <li><a href="<?=base_url()?>"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="<?=base_url('Dashboard/users')?>" class="active">Users</a></li>
       </ol>
     </section>
 
@@ -37,7 +37,7 @@
                 </div>
               <?php } ?>
 
-              <a href="<?=base_url('admin/form_user')?>" style="margin-bottom:10px;" type="button" class="btn btn-primary" name="tambah_data"><i class="fa fa-plus-circle" aria-hidden="true"></i> Tambah Data</a>
+              <a href="<?=base_url('Dashboard/form_user')?>" style="margin-bottom:10px;" type="button" class="btn btn-primary" name="tambah_data"><i class="fa fa-plus-circle" aria-hidden="true"></i> Tambah Data</a>
               <div class="table-responsive">
               <table id="example1" class="table table-bordered table-striped">
                 <thead>
