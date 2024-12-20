@@ -105,6 +105,7 @@
                 </span>
             </a>
             </li>
+
             <li class="header">PENGADUAN</li>
 
             <li class="treeview">
@@ -116,40 +117,39 @@
               </a>
               <ul class="treeview-menu">
                 <li><a href="<?php echo base_url('Dashboard/form_baru') ?>"><i class="fa fa-circle-o"></i> Form Pengaduan Baru</a></li>
-                  <li><a href="<?php echo base_url('Dashboard/form_user') ?>"><i class="fa fa-circle-o"></i> Form User</a></li>
+                <li><a href="<?php echo base_url('Dashboard/form_user') ?>"><i class="fa fa-circle-o"></i> Form User</a></li>
               </ul>
             </li>
 
             <li class="treeview">
-            <a href="#">
-                <i class="fa fa-table"></i> <span>Tabel Pengaduan</span>
-                <span class="pull-right-container">
-                <i class="fa fa-angle-left pull-right"></i>
-                </span>
-            </a>
-            <ul class="treeview-menu">
-                <li><a href="<?= base_url('Dashboard/baru') ?>"><i class="fa fa-circle-o"></i> Tabel Pengaduan Baru</a></li>
-                <li><a href="<?= base_url('Dashboard/proses') ?>"><i class="fa fa-circle-o"></i> Tabel Pengaduan Proses</a></li>
-                <li><a href="<?= base_url('Dashboard/selesai') ?>"><i class="fa fa-circle-o"></i> Tabel Pengaduan Selesai</a></li>
-                <li><a href="<?= base_url('Dashboard/ditolak') ?>"><i class="fa fa-circle-o"></i> Tabel Pengaduan Ditolak</a></li> 
-            </ul>
-          </li>
-            <li class="treeview">
+              <a href="#">
+                  <i class="fa fa-table"></i> <span>Tabel Pengaduan</span>
+                  <span class="pull-right-container">
+                  <i class="fa fa-angle-left pull-right"></i>
+                  </span>
+              </a>
+              <ul class="treeview-menu">
+                  <li><a href="<?= base_url('Dashboard/baru') ?>"><i class="fa fa-circle-o"></i> Tabel Pengaduan Baru</a></li>
+                  <li><a href="<?= base_url('Dashboard/proses') ?>"><i class="fa fa-circle-o"></i> Tabel Pengaduan Proses</a></li>
+                  <li><a href="<?= base_url('Dashboard/selesai') ?>"><i class="fa fa-circle-o"></i> Tabel Pengaduan Selesai</a></li>
+                  <li><a href="<?= base_url('Dashboard/ditolak') ?>"><i class="fa fa-circle-o"></i> Tabel Pengaduan Ditolak</a></li> 
+              </ul>
+            </li>
+            <li>
                 <a href="<?= base_url('Dashboard/report') ?>">
                 <i class="fa fa-edit"></i> <span>Report</span>
                 <span class="pull-right-container"></span>
                 </a>                                           
             </li>
-            <li>
             <li class="header">LABELS</li>
             <li>
-            <a href="<?php echo base_url('Dashboard/profile') ?>">
-                <i class="fa fa-cogs" aria-hidden="true"></i> <span>Profile</span></a>
+              <a href="<?php echo base_url('Dashboard/profile') ?>">
+              <i class="fa fa-cogs" aria-hidden="true"></i> <span>Profile</span></a>
             </li>
-          <li>
-            <a href="<?php echo base_url('Dashboard/users') ?>">
+            <li>
+              <a href="<?php echo base_url('Dashboard/users') ?>">
               <i class="fa fa-fw fa-users" aria-hidden="true"></i> <span>Users</span></a>
-          </li>
+            </li>
         </ul>
       </section>
       <!-- /.sidebar -->
