@@ -11,7 +11,6 @@
       $id=$d->id;
       $username=$d->username;
       $email=$d->email;
-      $role=$d->role;
       $flag = 1;
       $link=base_url('Dashboard/proses_update_user');
     }

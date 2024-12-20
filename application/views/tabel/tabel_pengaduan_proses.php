@@ -44,6 +44,8 @@
                   <th>Longitude 2</th>
                   <th>Jenis Kerusakan</th>
                   <th>Tingkat Kerusakan</th>
+                  <th>Selesai</th>
+                  <th>Cancel</th>
                 </tr>
                 </thead>
                 <?php if(!empty($list_data)){ ?>
@@ -59,6 +61,8 @@
                     <td><?=$dd->longitude2?></td>
                     <td><?=$dd->jenis_kerusakan?></td>
                     <td><?=$dd->tingkat_kerusakan?></td>
+                    <td><a type="button" class="btn btn-success"  href="<?=base_url('Dashboard/edit_user/'.$dd->id)?>" name="btn_update" style="margin:auto;"><i class="fa fa-pencil" aria-hidden="true"></i></a></td>
+                    <td><a type="button" class="btn btn-danger btn-delete"  href="<?=base_url('Dashboard/proses_delete_user/'.$dd->id)?>" name="btn_delete" style="margin:auto;" onclick="return confirm('Are you sure?')"><i class="fa fa-pencil" aria-hidden="true"></i></a></td>
                 </tr>
               <?php $no++; ?>
               <?php endforeach;?>
@@ -76,6 +80,8 @@
                     <th>Longitude 2</th>
                     <th>Jenis Kerusakan</th>
                     <th>Tingkat Kerusakan</th>
+                    <th>Selesai</th>
+                    <th>Cancel</th>
                   </tr>
                 </tfoot>
               </table>

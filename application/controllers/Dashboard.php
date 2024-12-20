@@ -297,6 +297,99 @@ class Dashboard extends CI_Controller {
 		} 
 	}
 
+	public function edit_user()
+	{
+		if($this->session->userdata('status') == 'login'){
+		
+			$id = $this->uri->segment(3);
+			$where = array('id' => $id);
+			$data['list_data'] = $this->KerusakanJalan_model->get_data('user',$where);
+			$data['nav'] = 6;
+		
+			// Load View
+			$this->load->view('component/header');
+			$data['main_header'] = $this->load->view('component/main_header', $data, TRUE);
+			$data['sidebar'] = $this->load->view('component/sidebar', NULL, TRUE);
+			$this->load->view('form/form_users',$data);
+			$this->load->view('component/footer');
+		}else {
+			redirect(base_url());
+		}
+	}
+
+	public function proses_update_user()
+	{
+		if($this->session->userdata('status') == 'login'){
+		
+		$this->form_validation->set_rules('username','Username','required');
+		$this->form_validation->set_rules('email','Email','required|valid_email');
+	
+		
+		if($this->form_validation->run() == TRUE)
+		{
+			
+			$id           = $this->input->post('id',TRUE);        
+			$username     = $this->input->post('username',TRUE);
+			$email        = $this->input->post('email',TRUE);
+	
+			$where = array('id' => $id);
+			$data = array(
+					'username'     => $username,
+					'email'        => $email,
+			);
+	
+			$data_report = array(
+				'id_report'        => 'RP-'.date("Y").random_string('numeric', 8),
+				'user_report'      => $this->session->userdata('name'),
+				'jenis_report'     => 'report_user',
+				'note'             => 'Update User'. ' (' .$username. ')' 
+			);
+			
+			$this->KerusakanJalan_model->insert('tb_report',$data_report);
+	
+			$this->KerusakanJalan_model->update('user',$data,$where);
+			$this->session->set_flashdata('msg_berhasil','Data User Berhasil Diupdate');
+			redirect(base_url('Dashboard/users'));
+			
+		}else{
+			// Load View
+			$this->load->view('component/header');
+			$data['main_header'] = $this->load->view('component/main_header', $data, TRUE);
+			$data['sidebar'] = $this->load->view('component/sidebar', NULL, TRUE);
+			$this->load->view('form/form_users',$data);
+			$this->load->view('component/footer');
+		}
+		}else {
+			redirect(base_url());
+		}
+	}
+
+	public function proses_delete_user()
+	{
+		if($this->session->userdata('status') == 'login'){
+	
+			$username = $this->uri->segment(3);
+		
+			$where = array('username' => $username);
+		
+			$this->KerusakanJalan_model->delete('user',$where);
+			
+			$data_report = array(
+				'id_report'        => 'RP-'.date("Y").random_string('numeric', 8),
+				'user_report'      => $this->session->userdata('name'),
+				'jenis_report'     => 'report_user',
+				'note'             => 'Delete User'. ' (' .$username. ')' 
+			);
+			
+			$this->KerusakanJalan_model->insert('tb_report',$data_report);
+		
+			$this->session->set_flashdata('msg_berhasil','Data User Behasil Dihapus');
+			redirect(base_url('Dashboard/users'));
+		}else {
+			redirect(base_url());
+		}
+	}
+
 	public function proses_reset_user()
 	{
 		if($this->session->userdata('status') == 'login'){
