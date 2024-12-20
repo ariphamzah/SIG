@@ -8,6 +8,11 @@ class Dashboard extends CI_Controller {
         $this->load->model('KerusakanJalan_model');
     }
 
+	private function hash_password($password)
+	{
+		return password_hash($password,PASSWORD_DEFAULT);
+	}
+
 	/**
 	 * Index Page for this controller.
 	 *
@@ -42,28 +47,38 @@ class Dashboard extends CI_Controller {
 
 	 public function baru()
 	 {
-		$data['list_data'] = $this->KerusakanJalan_model->selecttabel('kerusakan_jalan','Diajukan');
-	 	$data['nav'] = 2;
+		if($this->session->userdata('status') == 'login'){
+			$data['list_data'] = $this->KerusakanJalan_model->selecttabel('kerusakan_jalan','Diajukan');
+			$data['nav'] = 2;
 
-	 	// Load View
-	 	$this->load->view('component/header');
-	 	$data['main_header'] = $this->load->view('component/main_header', $data, TRUE);
-	 	$data['sidebar'] = $this->load->view('component/sidebar', NULL, TRUE);
-		$this->load->view('tabel_pengaduan_baru', $data);
-	 	$this->load->view('component/footer');
+			// Load View
+			$this->load->view('component/header');
+			$data['main_header'] = $this->load->view('component/main_header', $data, TRUE);
+			$data['sidebar'] = $this->load->view('component/sidebar', NULL, TRUE);
+			$this->load->view('tabel/tabel_pengaduan_baru', $data);
+			$this->load->view('component/footer');
+		} else {
+			redirect(base_url());
+		}
 		
 	}
 
 	public function form_baru()
   	{
-      $data['nav'] = 1;
-      
-      // Load View
-      $this->load->view('component/header');
-      $data['main_header'] = $this->load->view('component/main_header', $data, TRUE);
-      $data['sidebar'] = $this->load->view('component/sidebar', NULL, TRUE);
-      $this->load->view('form_baru(bck)', $data);
-      $this->load->view('component/footer');  
+		if($this->session->userdata('status') == 'login'){
+		$data['nav'] = 1;
+
+		// Load View
+		$this->load->view('component/header');
+		$data['main_header'] = $this->load->view('component/main_header', $data, TRUE);
+		$data['sidebar'] = $this->load->view('component/sidebar', NULL, TRUE);
+		$this->load->view('form/form_baru(bck)', $data);
+		$this->load->view('component/footer');  
+
+		}else {
+			$this->load->view('form/form_baru');
+		}
+
   	}
 
 	public function proses_pengaduan_baru(){
@@ -131,7 +146,7 @@ class Dashboard extends CI_Controller {
 			$this->load->view('component/header');
 			$data['main_header'] = $this->load->view('component/main_header', $data, TRUE);
 			$data['sidebar'] = $this->load->view('component/sidebar', NULL, TRUE);
-			$this->load->view('form_baru', $data);
+			$this->load->view('form/form_baru', $data);
 			$this->load->view('component/footer');
 		  }
 		//   }else {
@@ -141,6 +156,7 @@ class Dashboard extends CI_Controller {
 
 	public function proses()
 	 {
+		if($this->session->userdata('status') == 'login'){
 	 		$data['nav'] = 3;
 			$data['list_data'] = $this->KerusakanJalan_model->selecttabel('kerusakan_jalan','Diproses');
 			
@@ -148,13 +164,16 @@ class Dashboard extends CI_Controller {
 	 		$this->load->view('component/header');
 	 		$data['main_header'] = $this->load->view('component/main_header', $data, TRUE);
 	 		$data['sidebar'] = $this->load->view('component/sidebar', NULL, TRUE);
-			$this->load->view('tabel_pengaduan_proses', $data);
+			$this->load->view('tabel/tabel_pengaduan_proses', $data);
 	 		$this->load->view('component/footer');
-		
+		} else {
+			redirect(base_url());
+		}
 	}
 
 	public function selesai()
 	 {
+		if($this->session->userdata('status') == 'login'){
 	 		$data['nav'] = 4;
 			$data['list_data'] = $this->KerusakanJalan_model->selecttabel('kerusakan_jalan','Selesai');
 
@@ -162,13 +181,16 @@ class Dashboard extends CI_Controller {
 	 		$this->load->view('component/header');
 	 		$data['main_header'] = $this->load->view('component/main_header', $data, TRUE);
 	 		$data['sidebar'] = $this->load->view('component/sidebar', NULL, TRUE);
-			$this->load->view('tabel_pengaduan_selesai', $data);
+			$this->load->view('tabel/tabel_pengaduan_selesai', $data);
 	 		$this->load->view('component/footer');
-		
+		} else {
+			redirect(base_url());
+		}
 	}
 
 	public function ditolak()
 	 {
+		if($this->session->userdata('status') == 'login'){
 	 		$data['nav'] = 5;
 			$data['list_data'] = $this->KerusakanJalan_model->selecttabel('kerusakan_jalan','Ditolak');
 
@@ -176,9 +198,64 @@ class Dashboard extends CI_Controller {
 	 		$this->load->view('component/header');
 	 		$data['main_header'] = $this->load->view('component/main_header', $data, TRUE);
 	 		$data['sidebar'] = $this->load->view('component/sidebar', NULL, TRUE);
-			$this->load->view('tabel_pengaduan_ditolak', $data);
+			$this->load->view('tabel/tabel_pengaduan_ditolak', $data);
 	 		$this->load->view('component/footer');
+		} else {
+			redirect(base_url());
+		}
+	}
+
+	####################################
+              // Users
+	####################################
+	public function users()
+	{
+		if($this->session->userdata('status') == 'login'){
+			$data['list_users'] = $this->KerusakanJalan_model->read('user',$this->session->userdata('name'));
+			$this->session->set_userdata($data);
+			$data['nav'] = 8;
+	
+			// Load View
+			$this->load->view('component/header');
+			$data['main_header'] = $this->load->view('component/main_header', $data, TRUE);
+			$data['sidebar'] = $this->load->view('component/sidebar', NULL, TRUE);
+			$this->load->view('tabel/tabel_user', $data);
+			$this->load->view('component/footer');
+		}else {
+			redirect(base_url());
+		} 
+	}
+
+	public function proses_reset_user()
+	{
+		if($this->session->userdata('status') == 'login'){
+
+			$reset = $this->uri->segment(3);
 		
+			$data = array(
+				'password' => $this->hash_password($reset)
+			);
+		
+			$where = array(
+				'username' =>$reset
+			);
+		
+			$data_report = array(
+				'id_report'        => 'RP-'.date("Y").random_string('numeric', 8),
+				'user_report'      => $this->session->userdata('name'),
+				'jenis_report'     => 'report_user',
+				'note'             => 'Reset Password User'. ' (' .$reset. ')' 
+			);
+			
+			$this->KerusakanJalan_model->insert('tb_report',$data_report);
+		
+			$this->KerusakanJalan_model->update_password('user',$where,$data);
+		
+			$this->session->set_flashdata('msg_berhasil','Password Telah Direset');
+			redirect(base_url('Dashboard/users'));
+		}else {
+			redirect(base_url());
+		}
 	}
 
 	//public function tabel_kerusakanjalan()

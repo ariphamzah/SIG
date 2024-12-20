@@ -37,4 +37,20 @@ class KerusakanJalan_model extends CI_Model {
                       ->get();
         return $query->result();
     }
+    public function read($tabel,$username)
+    {
+        $query = $this->db->select()
+                        ->from($tabel)
+                        ->where_not_in('username',$username)
+                        ->get();
+
+        return $query->result();
+    }
+
+    public function update_password($tabel,$where,$data)
+    {
+        $this->db->where($where);
+        $this->db->update($tabel,$data);
+    }
+
 }

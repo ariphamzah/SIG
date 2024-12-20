@@ -17,12 +17,17 @@
             </li>
             <li class="header">PENGADUAN</li>
 
-            <li class="<?= ($nav == '1')?'active':'' ?>">
-            <a href="<?= base_url('Dashboard/form_baru') ?>">
-                <i class="fa fa-edit"></i> <span>Form Pengaduan Baru</span>
+            <li class="treeview <?= ($nav != '1')?($nav != '9')?'':'active':'active' ?>" href="<?= site_url('Welcome') ?>">
+              <a href="#">
+                <i class="fa fa-edit"></i> <span>Forms</span>
                 <span class="pull-right-container">
+                  <i class="fa fa-angle-left pull-right"></i>
                 </span>
-            </a>
+              </a>
+              <ul class="treeview-menu">
+                <li class="<?= ($nav == '1')?'active':'' ?>"><a href="<?= base_url('Dashboard/form_baru') ?>"><i class="fa fa-circle-o"></i> Form Pengaduan Baru</a></li>
+                <li class="<?= ($nav == '9')?'active':'' ?>"><a href="<?= base_url('Dashboard/form_user') ?>"><i class="fa fa-circle-o"></i> Form User</a></li>
+              </ul>
             </li>
 
             <li class="treeview <?= ($nav != '2')?($nav != '3')?($nav != '4')?($nav != '5')?'':'active':'active':'active':'active' ?>" href="<?= site_url('Welcome') ?>">
@@ -47,11 +52,11 @@
           </li>
           <li>
             <li class="header">LABELS</li>
-          <li class="<?= ($nav == '5')?'active':'' ?>">
+          <li class="<?= ($nav == '7')?'active':'' ?>">
             <a href="<?php echo base_url('Dashboard/profile') ?>">
                 <i class="fa fa-cogs" aria-hidden="true"></i> <span>Profile</span></a>
           </li>
-          <li>
+          <li class="<?= ($nav == '8')?'active':'' ?>">
             <a href="<?php echo base_url('Dashboard/users') ?>">
               <i class="fa fa-fw fa-users" aria-hidden="true"></i> <span>Users</span></a>
           </li>

@@ -57,7 +57,11 @@
         </a>
 
         <!-- Header Navbar: style can be found in header.less -->
-        <?php } ?> <nav class="navbar navbar-static-top">
+        <nav class="navbar navbar-static-top">
+
+        <?php } ?> 
+        
+        <nav class="navbar navbar-static-top" style="margin-left:0">
 
         <?php if (!empty($this->session->userdata('name'))) { ?>
 
@@ -103,13 +107,19 @@
             </li>
             <li class="header">PENGADUAN</li>
 
-            <li>
-            <a href="<?= base_url('Dashboard/form_baru') ?>">
-                <i class="fa fa-edit"></i> <span>Form Pengaduan Baru</span>
+            <li class="treeview">
+              <a href="#">
+                <i class="fa fa-edit"></i> <span>Forms</span>
                 <span class="pull-right-container">
+                  <i class="fa fa-angle-left pull-right"></i>
                 </span>
-            </a>
+              </a>
+              <ul class="treeview-menu">
+                <li><a href="<?php echo base_url('Dashboard/form_baru') ?>"><i class="fa fa-circle-o"></i> Form Pengaduan Baru</a></li>
+                  <li><a href="<?php echo base_url('Dashboard/form_user') ?>"><i class="fa fa-circle-o"></i> Form User</a></li>
+              </ul>
             </li>
+
             <li class="treeview">
             <a href="#">
                 <i class="fa fa-table"></i> <span>Tabel Pengaduan</span>
@@ -144,10 +154,11 @@
       </section>
       <!-- /.sidebar -->
     </aside>
-    <?php } ?>
 
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
+    <?php } ?>
+    <div class="content-wrapper" style="margin-left:0">
       <!-- Content Header (Page header) -->
       <section class="content-header">
         <h1>
@@ -356,7 +367,7 @@
       </section>
     </div>
 
-    <footer class="main-footer">
+    <footer class="main-footer" style="margin-left:0">
       <div class="pull-right hidden-xs">
         <b>Sistem Informasi Geografis</b>
       </div>
