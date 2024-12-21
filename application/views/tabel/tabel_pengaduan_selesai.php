@@ -32,6 +32,21 @@
             
             <div class="box-body">
 
+            <?php if($this->session->flashdata('msg_berhasil')){ ?>
+                <div class="alert alert-success alert-dismissible" style="width:100%">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <strong>Success!</strong><br> <?php echo $this->session->flashdata('msg_berhasil');?>
+                </div>
+               
+              <?php $this->session->unset_userdata('msg_berhasil'); //untuk menghapus flashdata ?>
+
+              <?php } if (validation_errors()) { ?>
+                <div class="alert alert-warning alert-dismissible">
+                  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                  <strong>Warning!</strong><br> <?php echo validation_errors(); ?>
+                </div>
+              <?php } ?>
+
               <div class="table-responsive">
               <table id="example1" class="table table-bordered">
                 <thead>
@@ -49,7 +64,6 @@
                 <?php if(!empty($list_data)){ ?>
                 <?php $no = 1;?>
                 <?php foreach($list_data as $dd): ?>
-                <tbody>
                 <tr>
                     <td><?=$no?></td>
                     <td><?=$dd->nama_jalan?></td>

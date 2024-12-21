@@ -127,15 +127,15 @@ class Dashboard extends CI_Controller {
 				  'kategori'		   => 'Diajukan'
 			);
 	  
-			// $data_report = array(
-			//   'id_report'        => 'RP-'.date("Y").random_string('numeric', 8),
-			//   'user_report'      => $this->session->userdata('name'),
-			//   'jenis_report'     => 'report_barang',
-			//   'note'             => 'Add Barang '.$id_transaksi. ' (' .$nama_barang. ')' 
-			// );
+			$data_report = array(
+			  'id_report'        => 'RP-'.date("Y").random_string('numeric', 8),
+			  'user_report'      => $this->session->userdata('name'),
+			  'jenis_report'     => 'Pengaduan Baru',
+			  'note'             => 'Tambah Kerusakan Jalan '.' (' .$nama_jalan. ')' 
+			);
 	  
 			$this->KerusakanJalan_model->insert('kerusakan_jalan',$data);
-			// $this->KerusakanJalan_model->insert('tb_report',$data_report);
+			$this->KerusakanJalan_model->insert('tb_report',$data_report);
 	  
 			$this->session->set_flashdata('msg_berhasil','Data Barang Berhasil Ditambahkan');
 			redirect(base_url('dashboard/baru'));
@@ -200,6 +200,83 @@ class Dashboard extends CI_Controller {
 	 		$data['sidebar'] = $this->load->view('component/sidebar', NULL, TRUE);
 			$this->load->view('tabel/tabel_pengaduan_ditolak', $data);
 	 		$this->load->view('component/footer');
+		} else {
+			redirect(base_url());
+		}
+	}
+
+	public function proses_pengaduan($id){
+		if($this->session->userdata('status') == 'login'){
+			$where = array('id' => $id);
+
+			$data = array(
+				'Kategori'   => "Diproses"
+			);	
+			
+			$data_report = array(
+				'id_report'        => 'RP-'.date("Y").random_string('numeric', 8),
+				'user_report'      => $this->session->userdata('name'),
+				'jenis_report'     => 'Proses Pengaduan',
+			  	'note'             => 'Proses Pengaduan jalan '.' ('.'ID Jalan = ' .$id. ')' 
+			);
+			
+			$this->KerusakanJalan_model->insert('tb_report',$data_report);
+			$this->KerusakanJalan_model->update('kerusakan_jalan',$data,$where);
+		
+			$this->session->set_flashdata('msg_berhasil','Data Jalan Diproses');
+			redirect(base_url('Dashboard/proses'));
+		} else {
+			redirect(base_url());
+		}
+	}
+
+	public function selesai_perbaikan($id){
+		if($this->session->userdata('status') == 'login'){
+			$where = array('id' => $id);
+
+			$data = array(
+				'Kategori'   => "Selesai"
+			);
+		
+			$this->KerusakanJalan_model->update('kerusakan_jalan',$data,$where);
+			
+			$data_report = array(
+				'id_report'        => 'RP-'.date("Y").random_string('numeric', 8),
+				'user_report'      => $this->session->userdata('name'),
+				'jenis_report'     => 'Selesao Perbaikan',
+				'note'             => 'Selesai Perbaikan jalan '.' ('.'ID Jalan = ' .$id. ')' 
+			);
+			
+			$this->KerusakanJalan_model->insert('tb_report',$data_report);
+		
+			$this->session->set_flashdata('msg_berhasil','Jalan Selesai Diperbaiki');
+			redirect(base_url('Dashboard/selesai'));
+		} else {
+			redirect(base_url());
+		}
+	}
+
+	public function tolak($id){
+		if($this->session->userdata('status') == 'login'){
+			$where = array('id' => $id);
+
+			$data = array(
+				'Kategori'   => "Ditolak"
+			);
+		
+			$this->KerusakanJalan_model->update('kerusakan_jalan',$data,$where);
+			
+			$data_report = array(
+				'id_report'        => 'RP-'.date("Y").random_string('numeric', 8),
+				'user_report'      => $this->session->userdata('name'),
+				'jenis_report'     => 'Penolakan Perbaikan',
+				'note'             => 'Penolakan Perbaikan jalan '.' ('.'ID Jalan = ' .$id. ')' 
+			);
+			
+			$this->KerusakanJalan_model->insert('tb_report',$data_report);
+		
+			$this->session->set_flashdata('msg_berhasil','Data Jalan Ditolak');
+			redirect(base_url('Dashboard/ditolak'));
 		} else {
 			redirect(base_url());
 		}
@@ -595,20 +672,4 @@ class Dashboard extends CI_Controller {
            // End Report
   	####################################
 
-	//public function tabel_kerusakanjalan()
-  //	{
-    
-    //  $data['list_data'] = $this->KerusakanJalan_model->select('kerusakan_jalan');
-    //  $data['nav'] = 100;
-
-      // Load View
-     // $this->load->view('component/header');
-     // $data['main_header'] = $this->load->view('component/main_header', $data, TRUE);
-     // $data['sidebar'] = $this->load->view('component/sidebar', NULL, TRUE);
-    // $this->load->view('coba',$data);
-     // $this->load->view('component/footer');
-  	//}
-	####################################
-           // End Dashboard
-  	####################################
 }
